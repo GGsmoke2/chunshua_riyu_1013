@@ -134,11 +134,14 @@ const closeImage = () => {
 
   @media (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
+    max-width: 90%;
+    margin: 0 auto;
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 95%;
   }
 }
 
@@ -159,6 +162,10 @@ const closeImage = () => {
     .card-overlay {
       opacity: 1;
     }
+  }
+
+  @media (max-width: 767px) {
+    border-radius: 12px;
   }
 }
 
@@ -182,6 +189,14 @@ const closeImage = () => {
 
   &:hover img {
     transform: scale(1.05);
+  }
+
+  @media (max-width: 767px) {
+    padding-top: 70%;
+
+    img {
+      padding: 12px;
+    }
   }
 }
 
@@ -214,8 +229,8 @@ const closeImage = () => {
   background: linear-gradient(180deg, #ffffff 0%, #f7fafc 100%);
 
   @media (max-width: 767px) {
-    padding: 15px;
-    font-size: 0.95rem;
+    padding: 10px 8px;
+    font-size: 0.85rem;
   }
 }
 

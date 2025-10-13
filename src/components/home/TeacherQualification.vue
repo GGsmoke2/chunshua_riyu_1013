@@ -122,7 +122,12 @@ const closeImage = () => {
 
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 24px;
+    max-width: 85%;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 90%;
   }
 }
 
@@ -147,6 +152,11 @@ const closeImage = () => {
     .card-overlay {
       opacity: 1;
     }
+  }
+
+  @media (max-width: 767px) {
+    padding: 12px;
+    border-radius: 16px;
   }
 }
 
