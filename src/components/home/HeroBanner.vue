@@ -27,19 +27,18 @@ const goToGrammar = () => {
     <div class="hero-content">
       <div class="container">
         <h1 class="hero-title">
-          <span class="main-title">帮你轻松过级的</span>
-          <span class="highlight-text">纯刷题式日语工具</span>
+          <span class="main-title">轻松过级</span>
+          <span class="highlight-text">纯刷题式日语</span>
         </h1>
 
         <div class="hero-description">
           <div class="desc-highlight">
-            <span class="tag">刷题锁考点</span>
-            <span class="tag">单词复现记</span>
-            <span class="tag">错题复盘补坑</span>
+            <span class="tag">锁考点</span>
+            <span class="tag">复现记</span>
+            <span class="tag">补坑练</span>
           </div>
-          <p class="main-desc">帮你扎牢日语基础、突破考级难点 —— 不用死磕大段时间，持续练就能记牢知识点，轻松过考</p>
-          <p class="sub-desc">最重要的是靠<strong>「碎片化时间」</strong>灵活学 —— 课间、排队、等车时随时刷题背词，让日语考级再也不是难题！</p>
-          <p class="cta-desc">备考日语考级总愁没精力、没方向的同学？欢迎用<strong>「纯刷日语」</strong>！我们非常懂你想高效冲级的迫切需求！</p>
+          <p class="main-desc">碎片时间高效学习 · 持续练习记牢知识</p>
+          <p class="sub-desc">课间、排队、等车随时刷题背词<br>让日语考级不再是难题</p>
         </div>
 
         <div class="hero-actions">
@@ -110,15 +109,15 @@ const goToGrammar = () => {
 
 .hero-banner {
   position: relative;
-  min-height: 650px;
+  min-height: 600px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+  background: linear-gradient(135deg, #fafafa 0%, #f0f9ff 50%, #e0f2fe 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 
   @media (max-width: 767px) {
-    min-height: 550px;
+    min-height: 500px;
   }
 }
 
@@ -139,27 +138,27 @@ const goToGrammar = () => {
   animation: float 8s ease-in-out infinite;
 
   &.orb-1 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, #bfdbfe 0%, transparent 70%);
-    top: -150px;
-    left: -150px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, #60a5fa 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
     animation-delay: 0s;
   }
 
   &.orb-2 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #93c5fd 0%, transparent 70%);
-    bottom: -100px;
-    right: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+    bottom: -150px;
+    right: -150px;
     animation-delay: 2s;
   }
 
   &.orb-3 {
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, #ddd6fe 0%, transparent 70%);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #38bdf8 0%, transparent 70%);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -197,57 +196,61 @@ const goToGrammar = () => {
   }
 
   .main-title {
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #475569;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 0.05em;
 
     @media (max-width: 1024px) {
-      font-size: 1.9rem;
+      font-size: 1.4rem;
     }
 
     @media (max-width: 767px) {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
   }
 
   .highlight-text {
-    font-size: 3.8rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+    font-size: 4.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #2563eb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
+    letter-spacing: -0.02em;
 
     @media (max-width: 1024px) {
-      font-size: 3rem;
+      font-size: 3.5rem;
     }
 
     @media (max-width: 767px) {
-      font-size: 2.2rem;
+      font-size: 2.5rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
 
     &::after {
       content: '';
       position: absolute;
-      bottom: -8px;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%);
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 6px;
+      background: linear-gradient(90deg, transparent 0%, #0ea5e9 50%, transparent 100%);
       border-radius: 3px;
 
       @media (max-width: 767px) {
         height: 4px;
-        bottom: -6px;
+        bottom: -8px;
+        width: 150px;
       }
     }
   }
@@ -265,39 +268,57 @@ const goToGrammar = () => {
   .desc-highlight {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 32px;
     flex-wrap: wrap;
 
     @media (max-width: 767px) {
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
     .tag {
-      display: inline-block;
-      padding: 8px 20px;
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 28px;
       background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%);
       color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 24px;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+      }
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+
+        &::before {
+          left: 100%;
+        }
       }
 
       @media (max-width: 767px) {
-        padding: 6px 16px;
-        font-size: 0.9rem;
+        padding: 10px 24px;
+        font-size: 1rem;
       }
 
       @media (max-width: 480px) {
-        padding: 5px 14px;
-        font-size: 0.85rem;
+        padding: 8px 20px;
+        font-size: 0.9rem;
       }
     }
   }
@@ -320,49 +341,32 @@ const goToGrammar = () => {
   }
 
   .main-desc {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #1e293b;
-    font-weight: 500;
+    font-weight: 600;
+    margin-bottom: 16px;
 
     @media (max-width: 767px) {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
     }
   }
 
   .sub-desc {
     font-size: 1.1rem;
-    color: #475569;
+    color: #64748b;
+    font-weight: 400;
+    line-height: 2;
 
     @media (max-width: 767px) {
       font-size: 1rem;
     }
 
     @media (max-width: 480px) {
-      font-size: 0.9rem;
-    }
-  }
-
-  .cta-desc {
-    font-size: 1.15rem;
-    color: #1e293b;
-    font-weight: 500;
-    background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
-    padding: 16px 24px;
-    border-radius: 12px;
-    border-left: 4px solid #3b82f6;
-
-    @media (max-width: 767px) {
-      font-size: 1rem;
-      padding: 14px 20px;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-      padding: 12px 16px;
+      font-size: 0.95rem;
     }
   }
 }
