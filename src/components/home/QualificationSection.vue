@@ -18,11 +18,11 @@ const qualifications = ref<Qualification[]>([
     title: '增值电信业务经营许可证',
     image: 'https://csry.oss-cn-beijing.aliyuncs.com/zz/%E5%A2%9E%E5%80%BC%E7%94%B5%E4%BF%A1%E4%B8%9A%E5%8A%A1%E7%BB%8F%E8%90%A5%E8%AE%B8%E5%8F%AF%E8%AF%81.png'
   },
-  {
-    id: 'filing',
-    title: '备案',
-    image: 'https://csry.oss-cn-beijing.aliyuncs.com/zz/%E5%A4%87%E6%A1%88.png'
-  },
+  // {
+  //   id: 'filing',
+  //   title: '备案',
+  //   image: 'https://csry.oss-cn-beijing.aliyuncs.com/zz/%E5%A4%87%E6%A1%88.png'
+  // },
   {
     id: 'broadcast',
     title: '广播电视节目制作经营',
