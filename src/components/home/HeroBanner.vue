@@ -52,17 +52,7 @@ const goToGrammar = () => {
               <p class="feature-desc">两万个词汇 六万个例句<br>量大的词库背起来才过瘾</p>
             </div>
           </div>
-
-          <div class="feature-button" @click="goToPractice">
-            <div class="feature-icon">
-              <i class="ri-edit-box-line"></i>
-            </div>
-            <div class="feature-info">
-              <h3 class="feature-title">試題練習 <span class="feature-title-cn">刷题</span></h3>
-              <p class="feature-desc">N5到N1万道真题模拟题<br>越刷越爽 越爽越提分</p>
-            </div>
-          </div>
-
+          
           <div class="feature-button" @click="goToGrammar">
             <div class="feature-icon">
               <i class="ri-file-text-line"></i>
@@ -70,6 +60,16 @@ const goToGrammar = () => {
             <div class="feature-info">
               <h3 class="feature-title">文法 <span class="feature-title-cn">语法</span></h3>
               <p class="feature-desc">千条语法 从初级到高级<br>全覆盖 全面学习</p>
+            </div>
+          </div>
+          
+          <div class="feature-button" @click="goToPractice">
+            <div class="feature-icon">
+              <i class="ri-edit-box-line"></i>
+            </div>
+            <div class="feature-info">
+              <h3 class="feature-title">試題練習 <span class="feature-title-cn">刷题</span></h3>
+              <p class="feature-desc">N5到N1万道真题模拟题<br>越刷越爽 越爽越提分</p>
             </div>
           </div>
         </div>
