@@ -22,9 +22,15 @@ const BACK_PRESS_INTERVAL = 2000 // 2秒内再次点击退出
 
 // 检测是否为移动端应用
 const isMobileApp = () => {
-  return Capacitor.isNativePlatform() || 
-         window.innerWidth <= 768 || 
+  return Capacitor.isNativePlatform() ||
+         window.innerWidth <= 768 ||
          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+// 检测是否为纯网页环境（非移动应用）
+const isWebOnly = () => {
+  return !Capacitor.isNativePlatform() &&
+         !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
 // 处理返回按钮
@@ -69,7 +75,19 @@ onMounted(async () => {
   if (Capacitor.isNativePlatform()) {
     App.addListener('backButton', handleBackButton)
   }
-  
+
+  // 网页端直接进入主应用，跳过开屏和隐私政策弹窗
+  if (isWebOnly()) {
+    // 自动接受隐私政策
+    if (!authStore.privacyPolicyAccepted) {
+      authStore.acceptPrivacyPolicy()
+    }
+    // 直接显示主应用
+    showMainApp.value = true
+    return
+  }
+
+  // 移动端逻辑
   if (authStore.privacyPolicyAccepted) {
     // 已接受隐私政策
     if (isMobileApp()) {
