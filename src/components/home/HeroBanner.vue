@@ -27,13 +27,19 @@ const goToGrammar = () => {
     <div class="hero-content">
       <div class="container">
         <h1 class="hero-title">
-          让你上瘾的 <span class="highlight-text">日语学习工具</span>
+          <span class="main-title">帮你轻松过级的</span>
+          <span class="highlight-text">纯刷题式日语工具</span>
         </h1>
 
         <div class="hero-description">
-          <p>使用 选词成句、i+1、以终为始 等学习理论来帮助你得日语</p>
-          <p>通过不断的 重复 形成肌肉记忆</p>
-          <p>最重要的是 游戏化 的形式让学习日语从此不再痛苦</p>
+          <div class="desc-highlight">
+            <span class="tag">刷题锁考点</span>
+            <span class="tag">单词复现记</span>
+            <span class="tag">错题复盘补坑</span>
+          </div>
+          <p class="main-desc">帮你扎牢日语基础、突破考级难点 —— 不用死磕大段时间，持续练就能记牢知识点，轻松过考</p>
+          <p class="sub-desc">最重要的是靠<strong>「碎片化时间」</strong>灵活学 —— 课间、排队、等车时随时刷题背词，不用专门挤时间，日语考级再也不是难题！</p>
+          <p class="cta-desc">备考日语考级总愁没精力、没方向的同学？欢迎用<strong>「纯刷日语」</strong>！我们非常懂你想高效冲级的迫切需求！</p>
         </div>
 
         <div class="hero-actions">
@@ -178,45 +184,70 @@ const goToGrammar = () => {
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 40px 0;
-  line-height: 1.2;
+  margin: 0 0 32px 0;
+  line-height: 1.3;
   animation: fadeInUp 1s ease-out;
-
-  @media (max-width: 1024px) {
-    font-size: 2.8rem;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 
   @media (max-width: 767px) {
-    font-size: 2rem;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
 
-  @media (max-width: 480px) {
-    font-size: 1.6rem;
+  .main-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #475569;
+
+    @media (max-width: 1024px) {
+      font-size: 1.9rem;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+    }
   }
 
   .highlight-text {
+    font-size: 3.8rem;
+    font-weight: 800;
     background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
 
+    @media (max-width: 1024px) {
+      font-size: 3rem;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 2.2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.8rem;
+    }
+
     &::after {
       content: '';
       position: absolute;
-      bottom: -5px;
+      bottom: -8px;
       left: 0;
       right: 0;
-      height: 4px;
+      height: 5px;
       background: linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%);
-      border-radius: 2px;
+      border-radius: 3px;
 
       @media (max-width: 767px) {
-        height: 3px;
+        height: 4px;
+        bottom: -6px;
       }
     }
   }
@@ -224,27 +255,114 @@ const goToGrammar = () => {
 
 .hero-description {
   margin: 0 auto 50px;
-  max-width: 800px;
+  max-width: 900px;
   animation: fadeInUp 1s ease-out 0.2s backwards;
 
   @media (max-width: 767px) {
     margin-bottom: 40px;
   }
 
+  .desc-highlight {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    @media (max-width: 767px) {
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 24px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      }
+
+      @media (max-width: 767px) {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 480px) {
+        padding: 5px 14px;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
   p {
     color: #475569;
-    font-size: 1.2rem;
     line-height: 1.8;
-    margin: 10px 0;
+    margin: 16px 0;
     font-weight: 400;
 
     @media (max-width: 767px) {
-      font-size: 1.05rem;
+      margin: 14px 0;
       line-height: 1.7;
+    }
+
+    strong {
+      color: #0ea5e9;
+      font-weight: 700;
+    }
+  }
+
+  .main-desc {
+    font-size: 1.2rem;
+    color: #1e293b;
+    font-weight: 500;
+
+    @media (max-width: 767px) {
+      font-size: 1.05rem;
     }
 
     @media (max-width: 480px) {
       font-size: 0.95rem;
+    }
+  }
+
+  .sub-desc {
+    font-size: 1.1rem;
+    color: #475569;
+
+    @media (max-width: 767px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
+  }
+
+  .cta-desc {
+    font-size: 1.15rem;
+    color: #1e293b;
+    font-weight: 500;
+    background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 16px 24px;
+    border-radius: 12px;
+    border-left: 4px solid #3b82f6;
+
+    @media (max-width: 767px) {
+      font-size: 1rem;
+      padding: 14px 20px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      padding: 12px 16px;
     }
   }
 }
