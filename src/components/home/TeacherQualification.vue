@@ -38,7 +38,7 @@ const closeImage = () => {
         <div
           v-for="(teacher, index) in teachers"
           :key="teacher.id"
-          class="teacher-card"
+          class="teacher-card animate-fadeInUp"
           :style="{ animationDelay: `${index * 0.15}s` }"
           @click="openImage(teacher.image)"
         >
@@ -69,83 +69,71 @@ const closeImage = () => {
 </template>
 
 <style lang="scss" scoped>
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 .teacher-qualification-section {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-  padding: 80px 0 100px;
+  background: transparent;
+  position: relative;
+  padding: var(--spacing-xxxl) 0;
 
-  @media (max-width: 767px) {
-    padding: 60px 0 80px;
-  }
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 16px;
-  color: #2d3748;
-
-  @media (max-width: 767px) {
-    font-size: 2rem;
-  }
-}
-
-.section-subtitle {
-  text-align: center;
-  font-size: 1.1rem;
-  color: #718096;
-  margin-bottom: 50px;
-
-  @media (max-width: 767px) {
-    font-size: 1rem;
-    margin-bottom: 40px;
+  @media (max-width: 768px) {
+    padding: var(--spacing-xxl) 0;
   }
 }
 
 .teachers-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  gap: var(--spacing-xl);
   max-width: 1000px;
   margin: 0 auto;
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: var(--spacing-lg);
   }
 }
 
 .teacher-card {
   opacity: 0;
-  animation: fadeInScale 0.6s ease-out forwards;
   cursor: pointer;
 }
 
 .card-frame {
   position: relative;
-  padding: 20px;
-  background: linear-gradient(135deg, #0052D4 0%, #4364F7 100%);
-  border-radius: 20px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 24px rgba(0, 82, 212, 0.3);
+  padding: var(--spacing-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(178, 75, 243, 0.1), transparent);
+    transition: left var(--duration-slow) var(--ease-smooth);
+    z-index: 1;
+  }
 
   &:hover {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 16px 40px rgba(0, 82, 212, 0.4);
+    border-color: var(--color-neon-purple);
+    box-shadow: var(--shadow-xl), 0 0 40px var(--color-neon-purple-glow);
+
+    &::before {
+      left: 100%;
+    }
 
     .card-overlay {
       opacity: 1;
+    }
+
+    img {
+      transform: scale(1.05);
     }
   }
 }
@@ -153,19 +141,16 @@ const closeImage = () => {
 .card-image {
   position: relative;
   width: 100%;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
 
   img {
     width: 100%;
     height: auto;
     display: block;
-    transition: transform 0.4s ease;
-  }
-
-  &:hover img {
-    transform: scale(1.05);
+    transition: transform var(--duration-normal) var(--ease-smooth);
+    filter: brightness(1.05);
   }
 }
 
@@ -175,30 +160,35 @@ const closeImage = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 82, 212, 0.9) 0%, rgba(67, 100, 247, 0.9) 100%);
+  background: rgba(178, 75, 243, 0.2);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--duration-normal) var(--ease-smooth);
+  z-index: 2;
 }
 
 .overlay-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  color: white;
+  gap: var(--spacing-sm);
+  color: var(--color-text-primary);
 
   i {
     font-size: 3rem;
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: pulse 1.5s var(--ease-smooth) infinite;
+    color: var(--color-neon-purple);
+    text-shadow: var(--glow-md);
   }
 
   span {
     font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: 1px;
+    text-shadow: var(--glow-sm);
   }
 }
 
@@ -223,7 +213,8 @@ const closeImage = () => {
   justify-content: center;
   z-index: 9999;
   padding: 20px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--duration-normal) var(--ease-smooth);
+  backdrop-filter: blur(20px);
 }
 
 @keyframes fadeIn {
@@ -239,14 +230,14 @@ const closeImage = () => {
   position: relative;
   max-width: 95%;
   max-height: 95%;
-  animation: zoomIn 0.3s ease;
+  animation: zoomIn var(--duration-normal) var(--ease-smooth);
 
   img {
     max-width: 100%;
     max-height: 90vh;
     object-fit: contain;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xl), var(--glow-lg);
   }
 }
 
@@ -265,26 +256,29 @@ const closeImage = () => {
   position: absolute;
   top: -50px;
   right: 0;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--color-neon-purple);
+  color: var(--color-neon-purple);
   width: 45px;
   height: 45px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 1.8rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  box-shadow: 0 0 20px var(--color-neon-purple-glow);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--color-neon-purple);
+    color: white;
     transform: rotate(90deg);
+    box-shadow: 0 0 40px var(--color-neon-purple-glow);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     top: -45px;
     width: 40px;
     height: 40px;
