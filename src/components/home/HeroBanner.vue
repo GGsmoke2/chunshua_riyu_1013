@@ -38,7 +38,7 @@ const goToGrammar = () => {
             <span class="tag">错题复盘补坑</span>
           </div>
           <p class="main-desc">帮你扎牢日语基础、突破考级难点 —— 不用死磕大段时间，持续练就能记牢知识点，轻松过考</p>
-          <p class="sub-desc">最重要的是靠<strong>「碎片化时间」</strong>灵活学 —— 课间、排队、等车时随时刷题背词，不用专门挤时间，日语考级再也不是难题！</p>
+          <p class="sub-desc">最重要的是靠<strong>「碎片化时间」</strong>灵活学 —— 课间、排队、等车时随时刷题背词，让日语考级再也不是难题！</p>
           <p class="cta-desc">备考日语考级总愁没精力、没方向的同学？欢迎用<strong>「纯刷日语」</strong>！我们非常懂你想高效冲级的迫切需求！</p>
         </div>
 
