@@ -82,6 +82,10 @@ const currentYear = new Date().getFullYear()
   background-color: #2c3e50;
   color: #ecf0f1;
   padding: 50px 0 20px;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 }
 
 .container {
