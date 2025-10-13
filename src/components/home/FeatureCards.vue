@@ -25,15 +25,6 @@ const features = ref<FeatureCard[]>([
     link: '/vocabulary'
   },
   {
-    id: 'practice',
-    title: '试题练习',
-    titleZh: '刷题',
-    description: 'N5到N1万道真题模拟题 越刷越爽 越爽越提分',
-    icon: 'ri-file-list-3-line',
-    gradient: 'linear-gradient(135deg, #FA709A 0%, #FEE140 100%)',
-    link: '/practice'
-  },
-  {
     id: 'grammar',
     title: '文法',
     titleZh: '语法',
@@ -41,6 +32,15 @@ const features = ref<FeatureCard[]>([
     icon: 'ri-pencil-ruler-2-line',
     gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
     link: '/grammar'
+  },
+  {
+    id: 'practice',
+    title: '试题练习',
+    titleZh: '刷题',
+    description: 'N5到N1万道真题模拟题 越刷越爽 越爽越提分',
+    icon: 'ri-file-list-3-line',
+    gradient: 'linear-gradient(135deg, #FA709A 0%, #FEE140 100%)',
+    link: '/practice'
   }
 ])
 
