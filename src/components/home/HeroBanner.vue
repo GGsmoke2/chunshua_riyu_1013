@@ -1,57 +1,41 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const mainText = ref(`帮你轻松过级的纯刷题式日语工具
-用「刷题锁考点」「单词复现记」「错题复盘补坑」的学习逻辑，帮你扎牢日语基础、突破考级难点——
-不用死磕大段时间，持续练就能记牢知识点，轻松过考。
-最重要的是靠「碎片化时间」灵活学—— 课间、排队、等车时随时刷题背词，不用专门挤时间，日语考级再也不是难题！
-备考日语考级总愁没精力、没方向的同学？欢迎用「纯刷日语」！我们非常懂你想高效冲级的迫切需求！！`)
-
-const autoPlay = ref<NodeJS.Timeout | null>(null)
-
-const startAutoPlay = () => {
-  // 可以添加自动轮播逻辑
+const startLearning = () => {
+  router.push('/vocabulary')
 }
-
-const stopAutoPlay = () => {
-  if (autoPlay.value) {
-    clearInterval(autoPlay.value)
-    autoPlay.value = null
-  }
-}
-
-onMounted(() => {
-  startAutoPlay()
-})
-
-onUnmounted(() => {
-  stopAutoPlay()
-})
 </script>
 
 <template>
   <div class="hero-banner">
     <div class="hero-background">
-      <div class="floating-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-        <div class="shape shape-4"></div>
-        <div class="shape shape-5"></div>
-      </div>
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="gradient-orb orb-3"></div>
     </div>
 
     <div class="hero-content">
       <div class="container">
-        <div class="text-content">
-          <h1 class="main-title">
-            <span class="title-line" v-for="(line, index) in mainText.split('\n')" :key="index">
-              {{ line }}
-            </span>
-          </h1>
+        <h1 class="hero-title">
+          让你上瘾的 <span class="highlight-text">日语学习工具</span>
+        </h1>
+
+        <div class="hero-description">
+          <p>使用 选词成句、i+1、以终为始 等学习理论来帮助你得日语</p>
+          <p>通过不断的 重复 形成肌肉记忆</p>
+          <p>最重要的是 游戏化 的形式让学习日语从此不再痛苦</p>
+        </div>
+
+        <div class="hero-actions">
+          <button class="cta-button" @click="startLearning">
+            开启「纯刷部」
+          </button>
+          <a href="https://github.com/your-repo" target="_blank" class="github-link">
+            <i class="ri-star-line"></i>
+            Star us on GitHub
+          </a>
         </div>
       </div>
     </div>
@@ -59,19 +43,10 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-}
-
-@keyframes slideIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -79,14 +54,35 @@ onUnmounted(() => {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-20px, -20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 .hero-banner {
   position: relative;
-  min-height: 500px;
+  min-height: 600px;
   overflow: hidden;
-  background: linear-gradient(135deg, #0052D4 0%, #4364F7 50%, #6FB1FC 100%);
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 767px) {
-    min-height: 450px;
+    min-height: 500px;
   }
 }
 
@@ -99,119 +95,201 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.floating-shapes {
+.gradient-orb {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
 
-  .shape {
-    position: absolute;
-    opacity: 0.1;
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    animation: float 6s ease-in-out infinite;
+  &.orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+  }
 
-    &.shape-1 {
-      width: 300px;
-      height: 300px;
-      background: #fff;
-      top: 10%;
-      left: 10%;
-      animation-delay: 0s;
-    }
+  &.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+    bottom: -50px;
+    right: -50px;
+    animation-delay: 2s;
+  }
 
-    &.shape-2 {
-      width: 200px;
-      height: 200px;
-      background: #fff;
-      top: 60%;
-      right: 10%;
-      animation-delay: 1s;
-    }
-
-    &.shape-3 {
-      width: 150px;
-      height: 150px;
-      background: #fff;
-      top: 30%;
-      right: 30%;
-      animation-delay: 2s;
-    }
-
-    &.shape-4 {
-      width: 250px;
-      height: 250px;
-      background: #fff;
-      bottom: 10%;
-      left: 30%;
-      animation-delay: 3s;
-    }
-
-    &.shape-5 {
-      width: 180px;
-      height: 180px;
-      background: #fff;
-      top: 50%;
-      left: 50%;
-      animation-delay: 1.5s;
-    }
+  &.orb-3 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: 4s;
   }
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 80px 0;
+  padding: 100px 20px;
+  text-align: center;
 
   @media (max-width: 767px) {
-    padding: 50px 0;
+    padding: 60px 20px;
   }
 }
 
-.text-content {
-  text-align: center;
-  color: white;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.main-title {
-  font-size: 1.5rem;
-  line-height: 1.8;
-  font-weight: 500;
-  margin: 0;
-  animation: slideIn 1s ease-out;
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 40px 0;
+  line-height: 1.2;
+  animation: fadeInUp 1s ease-out;
+
+  @media (max-width: 1024px) {
+    font-size: 3rem;
+  }
 
   @media (max-width: 767px) {
-    font-size: 1.1rem;
-    line-height: 1.7;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
   }
 
   @media (max-width: 480px) {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 1.8rem;
   }
 
-  .title-line {
-    display: block;
-    margin-bottom: 12px;
-    opacity: 0;
-    animation: slideIn 0.8s ease-out forwards;
+  .highlight-text {
+    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
 
-    @media (max-width: 767px) {
-      margin-bottom: 10px;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
+      border-radius: 2px;
+
+      @media (max-width: 767px) {
+        height: 3px;
+      }
     }
+  }
+}
 
-    &:nth-child(1) { animation-delay: 0.1s; font-size: 2rem; font-weight: 700; margin-bottom: 20px; }
-    &:nth-child(2) { animation-delay: 0.2s; }
-    &:nth-child(3) { animation-delay: 0.3s; }
-    &:nth-child(4) { animation-delay: 0.4s; }
-    &:nth-child(5) { animation-delay: 0.5s; }
+.hero-description {
+  margin: 0 auto 50px;
+  max-width: 800px;
+  animation: fadeInUp 1s ease-out 0.2s backwards;
+
+  @media (max-width: 767px) {
+    margin-bottom: 40px;
+  }
+
+  p {
+    color: #9ca3af;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin: 10px 0;
+    font-weight: 400;
 
     @media (max-width: 767px) {
-      &:nth-child(1) { font-size: 1.5rem; margin-bottom: 15px; }
+      font-size: 1.1rem;
+      line-height: 1.7;
     }
 
     @media (max-width: 480px) {
-      &:nth-child(1) { font-size: 1.3rem; margin-bottom: 12px; }
+      font-size: 1rem;
     }
+  }
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  animation: fadeInUp 1s ease-out 0.4s backwards;
+  flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.cta-button {
+  padding: 16px 48px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  border: 2px solid transparent;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 767px) {
+    padding: 14px 36px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  i {
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    color: #ffffff;
+
+    i {
+      color: #fbbf24;
+    }
+  }
+
+  @media (max-width: 767px) {
+    font-size: 0.95rem;
   }
 }
 </style>
