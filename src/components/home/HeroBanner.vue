@@ -1,75 +1,191 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const canvas = ref<HTMLCanvasElement | null>(null)
+let animationId: number | null = null
 
-const goToVocabulary = () => {
-  router.push('/vocabulary')
+interface Particle {
+  x: number
+  y: number
+  size: number
+  speedX: number
+  speedY: number
+  opacity: number
 }
 
-const goToPractice = () => {
-  router.push('/practice')
+const particles: Particle[] = []
+
+const initParticles = (canvasEl: HTMLCanvasElement) => {
+  const particleCount = window.innerWidth < 768 ? 30 : 50
+  particles.length = 0
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvasEl.width,
+      y: Math.random() * canvasEl.height,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.5,
+      speedY: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.5 + 0.3
+    })
+  }
 }
 
-const goToGrammar = () => {
-  router.push('/grammar')
+const animateParticles = (canvasEl: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+  ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+
+  particles.forEach((particle, i) => {
+    particle.x += particle.speedX
+    particle.y += particle.speedY
+
+    if (particle.x < 0 || particle.x > canvasEl.width) particle.speedX *= -1
+    if (particle.y < 0 || particle.y > canvasEl.height) particle.speedY *= -1
+
+    ctx.beginPath()
+    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+    ctx.fillStyle = `rgba(0, 212, 255, ${particle.opacity})`
+    ctx.fill()
+
+    ctx.shadowBlur = 10
+    ctx.shadowColor = 'rgba(0, 212, 255, 0.5)'
+
+    particles.forEach((particle2, j) => {
+      if (i !== j) {
+        const dx = particle.x - particle2.x
+        const dy = particle.y - particle2.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+
+        if (distance < 150) {
+          ctx.beginPath()
+          ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 150)})`
+          ctx.lineWidth = 0.5
+          ctx.moveTo(particle.x, particle.y)
+          ctx.lineTo(particle2.x, particle2.y)
+          ctx.stroke()
+        }
+      }
+    })
+  })
+
+  animationId = requestAnimationFrame(() => animateParticles(canvasEl, ctx))
 }
+
+onMounted(() => {
+  if (canvas.value) {
+    canvas.value.width = window.innerWidth
+    canvas.value.height = window.innerHeight < 650 ? 650 : window.innerHeight
+
+    const ctx = canvas.value.getContext('2d')
+    if (ctx) {
+      initParticles(canvas.value)
+      animateParticles(canvas.value, ctx)
+    }
+
+    const handleResize = () => {
+      if (canvas.value) {
+        canvas.value.width = window.innerWidth
+        canvas.value.height = window.innerHeight < 650 ? 650 : window.innerHeight
+        initParticles(canvas.value)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleResize)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
+    })
+  }
+})
+
+const goToVocabulary = () => router.push('/vocabulary')
+const goToPractice = () => router.push('/practice')
+const goToGrammar = () => router.push('/grammar')
 </script>
 
 <template>
   <div class="hero-banner">
-    <div class="hero-background">
-      <div class="gradient-orb orb-1"></div>
-      <div class="gradient-orb orb-2"></div>
-      <div class="gradient-orb orb-3"></div>
-    </div>
+    <canvas ref="canvas" class="particle-canvas"></canvas>
+
+    <div class="grid-overlay"></div>
 
     <div class="hero-content">
       <div class="container">
-        <h1 class="hero-title">
-          <span class="main-title">帮你轻松过级的</span>
-          <span class="highlight-text">纯刷题式日语工具</span>
+        <h1 class="hero-title animate-fadeInDown">
+          <span class="title-line">帮你轻松过级的</span>
+          <span class="title-highlight neon-text">纯刷题式日语工具</span>
         </h1>
 
-        <div class="hero-description">
-          <div class="desc-highlight">
-            <span class="tag">刷题锁考点</span>
-            <span class="tag">单词复现记</span>
-            <span class="tag">错题复盘补坑</span>
+        <div class="hero-tags animate-fadeInUp animate-delay-2">
+          <div class="tech-tag" data-index="0">
+            <span>刷题锁考点</span>
           </div>
-          <p class="main-desc">帮你扎牢日语基础、突破考级难点 —— 不用死磕大段时间，持续练就能记牢知识点，轻松过考</p>
-          <p class="sub-desc">最重要的是靠<strong>「碎片化时间」</strong>灵活学 —— 课间、排队、等车时随时刷题背词，让日语考级再也不是难题！</p>
-          <p class="cta-desc">备考日语考级总愁没精力、没方向的同学？欢迎用<strong>「纯刷日语」</strong>！我们非常懂你想高效冲级的迫切需求！</p>
+          <div class="tech-tag" data-index="1">
+            <span>单词复现记</span>
+          </div>
+          <div class="tech-tag" data-index="2">
+            <span>错题复盘补坑</span>
+          </div>
         </div>
 
-        <div class="hero-actions">
-          <div class="feature-button" @click="goToVocabulary">
-            <div class="feature-icon">
+        <div class="hero-description animate-fadeInUp animate-delay-3">
+          <p class="desc-main">帮你扎牢日语基础、突破考级难点 —— 不用死磕大段时间，持续练就能记牢知识点，轻松过考</p>
+          <p class="desc-sub">最重要的是靠<span class="highlight">「碎片化时间」</span>灵活学 —— 课间、排队、等车时随时刷题背词，让日语考级再也不是难题！</p>
+        </div>
+
+        <div class="hero-actions animate-fadeInUp animate-delay-4">
+          <div class="feature-card" @click="goToVocabulary">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <i class="ri-book-open-line"></i>
             </div>
-            <div class="feature-info">
-              <h3 class="feature-title">単語 <span class="feature-title-cn">词汇</span></h3>
-              <p class="feature-desc">两万个词汇 六万个例句<br>量大的词库背起来才过瘾</p>
+            <div class="card-content">
+              <h3 class="card-title">
+                <span class="title-ja">単語</span>
+                <span class="title-cn">词汇</span>
+              </h3>
+              <p class="card-desc">两万个词汇 六万个例句</p>
+            </div>
+            <div class="card-arrow">
+              <i class="ri-arrow-right-line"></i>
             </div>
           </div>
 
-          <div class="feature-button" @click="goToPractice">
-            <div class="feature-icon">
+          <div class="feature-card" @click="goToPractice">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <i class="ri-edit-box-line"></i>
             </div>
-            <div class="feature-info">
-              <h3 class="feature-title">試題練習 <span class="feature-title-cn">刷题</span></h3>
-              <p class="feature-desc">N5到N1万道真题模拟题<br>越刷越爽 越爽越提分</p>
+            <div class="card-content">
+              <h3 class="card-title">
+                <span class="title-ja">試題練習</span>
+                <span class="title-cn">刷题</span>
+              </h3>
+              <p class="card-desc">N5到N1万道真题模拟题</p>
+            </div>
+            <div class="card-arrow">
+              <i class="ri-arrow-right-line"></i>
             </div>
           </div>
 
-          <div class="feature-button" @click="goToGrammar">
-            <div class="feature-icon">
+          <div class="feature-card" @click="goToGrammar">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <i class="ri-file-text-line"></i>
             </div>
-            <div class="feature-info">
-              <h3 class="feature-title">文法 <span class="feature-title-cn">语法</span></h3>
-              <p class="feature-desc">千条语法 从初级到高级<br>全覆盖 全面学习</p>
+            <div class="card-content">
+              <h3 class="card-title">
+                <span class="title-ja">文法</span>
+                <span class="title-cn">语法</span>
+              </h3>
+              <p class="card-desc">千条语法 从初级到高级</p>
+            </div>
+            <div class="card-arrow">
+              <i class="ri-arrow-right-line"></i>
             </div>
           </div>
         </div>
@@ -79,290 +195,178 @@ const goToGrammar = () => {
 </template>
 
 <style lang="scss" scoped>
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-20px, -20px);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
 .hero-banner {
   position: relative;
-  min-height: 650px;
+  min-height: 100vh;
+  max-height: 1000px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+  background: var(--color-bg-primary);
   display: flex;
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 767px) {
-    min-height: 550px;
+  @media (max-width: 768px) {
+    min-height: 100vh;
+    max-height: none;
   }
 }
 
-.hero-background {
+.particle-canvas {
   position: absolute;
-  width: 100%;
-  height: 100%;
   top: 0;
   left: 0;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
-.gradient-orb {
+.grid-overlay {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-image:
+    linear-gradient(var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px);
+  background-size: 50px 50px;
   opacity: 0.3;
-  animation: float 8s ease-in-out infinite;
-
-  &.orb-1 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, #bfdbfe 0%, transparent 70%);
-    top: -150px;
-    left: -150px;
-    animation-delay: 0s;
-  }
-
-  &.orb-2 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #93c5fd 0%, transparent 70%);
-    bottom: -100px;
-    right: -100px;
-    animation-delay: 2s;
-  }
-
-  &.orb-3 {
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, #ddd6fe 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: 4s;
-  }
+  pointer-events: none;
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
-  padding: 100px 20px;
-  text-align: center;
+  z-index: 3;
+  padding: var(--spacing-xxxl) var(--spacing-lg);
+  width: 100%;
 
-  @media (max-width: 767px) {
-    padding: 60px 20px;
+  @media (max-width: 768px) {
+    padding: var(--spacing-xxl) var(--spacing-md);
   }
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .hero-title {
-  margin: 0 0 32px 0;
-  line-height: 1.3;
-  animation: fadeInUp 1s ease-out;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-sm);
   align-items: center;
-  gap: 8px;
 
-  @media (max-width: 767px) {
-    margin-bottom: 24px;
-  }
-
-  .main-title {
-    font-size: 2.2rem;
+  .title-line {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 600;
-    color: #475569;
-
-    @media (max-width: 1024px) {
-      font-size: 1.9rem;
-    }
-
-    @media (max-width: 767px) {
-      font-size: 1.5rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 1.2rem;
-    }
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
   }
 
-  .highlight-text {
-    font-size: 3.8rem;
+  .title-highlight {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 800;
-    background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: 0.02em;
     position: relative;
-
-    @media (max-width: 1024px) {
-      font-size: 3rem;
-    }
-
-    @media (max-width: 767px) {
-      font-size: 2.2rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 1.8rem;
-    }
 
     &::after {
       content: '';
       position: absolute;
-      bottom: -8px;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, #0ea5e9 0%, #3b82f6 100%);
-      border-radius: 3px;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-full);
+      box-shadow: var(--glow-md);
+    }
+  }
+}
 
-      @media (max-width: 767px) {
-        height: 4px;
-        bottom: -6px;
-      }
+.hero-tags {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: var(--spacing-sm);
+  }
+}
+
+.tech-tag {
+  position: relative;
+  padding: 12px 28px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  cursor: default;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+    transition: left 0.6s var(--ease-smooth);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-neon-blue);
+    box-shadow: var(--glow-md);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px 22px;
+
+    span {
+      font-size: 0.9rem;
     }
   }
 }
 
 .hero-description {
-  margin: 0 auto 50px;
   max-width: 900px;
-  animation: fadeInUp 1s ease-out 0.2s backwards;
-
-  @media (max-width: 767px) {
-    margin-bottom: 40px;
-  }
-
-  .desc-highlight {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-
-    @media (max-width: 767px) {
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 8px 20px;
-      background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%);
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 24px;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-      }
-
-      @media (max-width: 767px) {
-        padding: 6px 16px;
-        font-size: 0.9rem;
-      }
-
-      @media (max-width: 480px) {
-        padding: 5px 14px;
-        font-size: 0.85rem;
-      }
-    }
-  }
+  margin: 0 auto var(--spacing-xxxl);
+  text-align: center;
 
   p {
-    color: #475569;
     line-height: 1.8;
-    margin: 16px 0;
-    font-weight: 400;
+    margin: var(--spacing-md) 0;
+  }
 
-    @media (max-width: 767px) {
-      margin: 14px 0;
-      line-height: 1.7;
-    }
+  .desc-main {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
 
-    strong {
-      color: #0ea5e9;
+  .desc-sub {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--color-text-secondary);
+
+    .highlight {
+      color: var(--color-neon-cyan);
       font-weight: 700;
-    }
-  }
-
-  .main-desc {
-    font-size: 1.2rem;
-    color: #1e293b;
-    font-weight: 500;
-
-    @media (max-width: 767px) {
-      font-size: 1.05rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.95rem;
-    }
-  }
-
-  .sub-desc {
-    font-size: 1.1rem;
-    color: #475569;
-
-    @media (max-width: 767px) {
-      font-size: 1rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-    }
-  }
-
-  .cta-desc {
-    font-size: 1.15rem;
-    color: #1e293b;
-    font-weight: 500;
-    background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
-    padding: 16px 24px;
-    border-radius: 12px;
-    border-left: 4px solid #3b82f6;
-
-    @media (max-width: 767px) {
-      font-size: 1rem;
-      padding: 14px 20px;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-      padding: 12px 16px;
+      text-shadow: var(--glow-sm);
     }
   }
 }
@@ -370,149 +374,175 @@ const goToGrammar = () => {
 .hero-actions {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: var(--spacing-lg);
   max-width: 1100px;
   margin: 0 auto;
-  animation: fadeInUp 1s ease-out 0.4s backwards;
 
-  @media (max-width: 1024px) {
-    gap: 20px;
-  }
-
-  @media (max-width: 767px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 16px;
-    max-width: 500px;
+    gap: var(--spacing-md);
   }
 }
 
-.feature-button {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
+.feature-card {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-smooth);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 2px solid transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05), transparent);
+    transition: left var(--duration-slow) var(--ease-smooth);
+  }
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-12px);
+    border-color: var(--color-neon-blue);
+    box-shadow: var(--shadow-xl), var(--glow-lg);
+
+    &::before {
+      left: 100%;
+    }
+
+    .card-glow {
+      opacity: 1;
+    }
+
+    .card-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .card-arrow {
+      transform: translateX(5px);
+      opacity: 1;
+    }
   }
 
-  @media (max-width: 767px) {
-    padding: 20px;
+  @media (max-width: 768px) {
     flex-direction: row;
     text-align: left;
-  }
-
-  &:nth-child(1) {
-    border-color: #dbeafe;
-
-    &:hover {
-      border-color: #3b82f6;
-      box-shadow: 0 12px 24px rgba(59, 130, 246, 0.2);
-    }
-
-    .feature-icon {
-      background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%);
-    }
-  }
-
-  &:nth-child(2) {
-    border-color: #fce7f3;
-
-    &:hover {
-      border-color: #ec4899;
-      box-shadow: 0 12px 24px rgba(236, 72, 153, 0.2);
-    }
-
-    .feature-icon {
-      background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
-    }
-  }
-
-  &:nth-child(3) {
-    border-color: #e0e7ff;
-
-    &:hover {
-      border-color: #8b5cf6;
-      box-shadow: 0 12px 24px rgba(139, 92, 246, 0.2);
-    }
-
-    .feature-icon {
-      background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
-    }
+    padding: var(--spacing-lg);
   }
 }
 
-.feature-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.card-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  flex-shrink: 0;
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--glow-md);
+  transition: all var(--duration-normal) var(--ease-smooth);
 
   i {
     font-size: 2rem;
     color: white;
   }
 
-  @media (max-width: 767px) {
-    width: 50px;
-    height: 50px;
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
     margin-bottom: 0;
-    margin-right: 16px;
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
 
     i {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
     }
   }
 }
 
-.feature-info {
+.card-content {
   flex: 1;
 }
 
-.feature-title {
-  font-size: 1.3rem;
+.card-title {
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 8px 0;
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-text-primary);
 
-  @media (max-width: 767px) {
-    font-size: 1.15rem;
-    margin-bottom: 4px;
+  .title-ja {
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
   }
 
-  .feature-title-cn {
+  .title-cn {
     font-size: 1.1rem;
+    color: var(--color-text-secondary);
     font-weight: 600;
-    color: #64748b;
-    margin-left: 8px;
+  }
 
-    @media (max-width: 767px) {
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+
+    .title-ja {
+      font-size: 1.25rem;
+    }
+
+    .title-cn {
       font-size: 1rem;
     }
   }
 }
 
-.feature-desc {
+.card-desc {
   font-size: 0.95rem;
-  color: #64748b;
+  color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
 
-  @media (max-width: 767px) {
-    font-size: 0.85rem;
-    line-height: 1.5;
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.card-arrow {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--color-neon-blue);
+  opacity: 0;
+  transition: all var(--duration-normal) var(--ease-smooth);
+
+  @media (max-width: 768px) {
+    position: static;
+    opacity: 0.5;
+    margin-left: var(--spacing-sm);
   }
 }
 </style>
