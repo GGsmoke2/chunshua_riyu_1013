@@ -105,6 +105,11 @@ const router = createRouter({
       component: () => import('../views/AboutPage.vue')
     },
     {
+      path: '/invitation',
+      name: 'invitation',
+      component: () => import('../views/InvitationPage.vue')
+    },
+    {
       path: '/account-deletion',
       name: 'account-deletion',
       component: () => import('../views/AccountDeletionPage.vue')
