@@ -23,12 +23,9 @@ const isNativeApp = Capacitor.isNativePlatform()
 
 // 计算是否应该显示Footer
 const shouldShowFooter = computed(() => {
-  // 只在首页显示
-  if (route.name !== 'home') return false
-  
   // 在移动设备或原生应用中不显示Footer
   if (isMobile() || isNativeApp) return false
-  
+
   return true
 })
 </script>
@@ -50,7 +47,7 @@ const shouldShowFooter = computed(() => {
     <!-- 绘制功能按钮 -->
     <DrawingFAB />
     
-    <!-- 底部信息 - 只在桌面端首页显示 -->
+    <!-- 底部信息 - 在桌面端显示 -->
     <MainFooter v-if="shouldShowFooter" />
   </div>
 </template>
