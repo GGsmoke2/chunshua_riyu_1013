@@ -56,19 +56,17 @@ const closeImage = () => {
         <div
           v-for="(qual, index) in qualifications"
           :key="qual.id"
-          class="qualification-card animate-fadeInUp"
+          class="qualification-card"
           :style="{ animationDelay: `${index * 0.1}s` }"
           @click="openImage(qual.image)"
         >
-          <div class="card-inner">
-            <div class="card-image-wrapper">
-              <img :src="qual.image" :alt="qual.title" loading="lazy" />
-              <div class="card-overlay">
-                <i class="ri-search-line"></i>
-              </div>
+          <div class="card-image-wrapper">
+            <img :src="qual.image" :alt="qual.title" loading="lazy" />
+            <div class="card-overlay">
+              <i class="ri-search-line"></i>
             </div>
-            <div class="card-title">{{ qual.title }}</div>
           </div>
+          <div class="card-title">{{ qual.title }}</div>
         </div>
       </div>
     </div>
@@ -85,24 +83,58 @@ const closeImage = () => {
 </template>
 
 <style lang="scss" scoped>
-.qualification-section {
-  background: transparent;
-  position: relative;
-  padding: var(--spacing-xxxl) 0;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  @media (max-width: 768px) {
-    padding: var(--spacing-xxl) 0;
+.qualification-section {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  padding: 80px 0;
+
+  @media (max-width: 767px) {
+    padding: 60px 0;
+  }
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #2d3748;
+
+  @media (max-width: 767px) {
+    font-size: 2rem;
+  }
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #718096;
+  margin-bottom: 50px;
+
+  @media (max-width: 767px) {
+    font-size: 1rem;
+    margin-bottom: 40px;
   }
 }
 
 .qualifications-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
+  gap: 30px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
+    gap: 20px;
   }
 
   @media (max-width: 480px) {
@@ -111,46 +143,21 @@ const closeImage = () => {
 }
 
 .qualification-card {
-  position: relative;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   opacity: 0;
-}
-
-.card-inner {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all var(--duration-normal) var(--ease-smooth);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-    transition: left var(--duration-slow) var(--ease-smooth);
-    z-index: 1;
-  }
+  animation: slideUp 0.6s ease-out forwards;
 
   &:hover {
     transform: translateY(-8px);
-    border-color: var(--color-neon-blue);
-    box-shadow: var(--shadow-lg), var(--glow-md);
-
-    &::before {
-      left: 100%;
-    }
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 
     .card-overlay {
       opacity: 1;
-    }
-
-    img {
-      transform: scale(1.05);
     }
   }
 }
@@ -159,7 +166,7 @@ const closeImage = () => {
   position: relative;
   width: 100%;
   padding-top: 75%;
-  background: rgba(255, 255, 255, 0.05);
+  background: #f7fafc;
   overflow: hidden;
 
   img {
@@ -170,8 +177,11 @@ const closeImage = () => {
     height: 100%;
     object-fit: contain;
     padding: 20px;
-    transition: transform var(--duration-normal) var(--ease-smooth);
-    filter: brightness(1.1);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
   }
 }
 
@@ -181,35 +191,30 @@ const closeImage = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 212, 255, 0.15);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-smooth);
-  z-index: 2;
+  transition: opacity 0.3s ease;
 
   i {
     font-size: 3rem;
-    color: var(--color-neon-blue);
-    text-shadow: var(--glow-md);
+    color: white;
   }
 }
 
 .card-title {
-  padding: var(--spacing-lg);
+  padding: 20px;
   text-align: center;
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-text-primary);
-  border-top: 1px solid var(--glass-border);
-  background: rgba(0, 212, 255, 0.03);
-  position: relative;
-  z-index: 2;
+  color: #2d3748;
+  border-top: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fafc 100%);
 
-  @media (max-width: 768px) {
-    padding: var(--spacing-md);
+  @media (max-width: 767px) {
+    padding: 15px;
     font-size: 0.95rem;
   }
 }
@@ -220,14 +225,13 @@ const closeImage = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 20px;
-  animation: fadeIn var(--duration-normal) var(--ease-smooth);
-  backdrop-filter: blur(20px);
+  animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
@@ -243,14 +247,13 @@ const closeImage = () => {
   position: relative;
   max-width: 90%;
   max-height: 90%;
-  animation: zoomIn var(--duration-normal) var(--ease-smooth);
+  animation: zoomIn 0.3s ease;
 
   img {
     max-width: 100%;
     max-height: 90vh;
     object-fit: contain;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-xl), var(--glow-lg);
+    border-radius: 8px;
   }
 }
 
@@ -267,35 +270,25 @@ const closeImage = () => {
 
 .close-btn {
   position: absolute;
-  top: -50px;
+  top: -40px;
   right: 0;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 2px solid var(--color-neon-blue);
-  color: var(--color-neon-blue);
-  width: 45px;
-  height: 45px;
-  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 1.5rem;
-  transition: all var(--duration-normal) var(--ease-smooth);
-  box-shadow: var(--glow-md);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 
   &:hover {
-    background: var(--color-neon-blue);
-    color: white;
+    background: rgba(255, 255, 255, 0.3);
     transform: rotate(90deg);
-    box-shadow: var(--glow-lg);
-  }
-
-  @media (max-width: 768px) {
-    top: -45px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.3rem;
   }
 }
 </style>
